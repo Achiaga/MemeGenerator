@@ -11,6 +11,7 @@ class MemeGenerator extends React.Component {
 			allMemeImgs: [],
 		};
 		this.handleChange = this.handleChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
 	componentDidMount() {
@@ -25,21 +26,23 @@ class MemeGenerator extends React.Component {
 	}
 
 	handleChange(event) {
-		const { name, value, type, checked } = event.target;
+		const { name, value } = event.target;
 		this.setState({
 			[name]: value,
 		});
 	}
 
+	handleSubmit(event) {
+		event.preventDefault();
+		const randNum = Math.floor(Math.random() * this.state.allMemeImgs.length);
+		const randMemeImg = this.state.allMemeImgs[randNum].url;
+		this.setState({ randomImg: randMemeImg });
+	}
+
 	render() {
 		return (
 			<div>
-				<form className='meme-form'>
-					{/**
-					 * Create 2 input fields, one for the topText and one for the bottomText
-					 * Remember that these will be "controlled forms", so make sure to add
-					 * all the attributes you'll need for that to work
-					 */}
+				<form className='meme-form' onSubmit={this.handleSubmit}>
 					<input
 						name='topText'
 						value={this.state.topText}
@@ -57,6 +60,12 @@ class MemeGenerator extends React.Component {
 
 					<button>Gen</button>
 				</form>
+
+				<div className='meme'>
+					<img src={this.state.randomImg} alt='' />
+					<h2 className='top'>{this.state.topText}</h2>
+					<h2 className='bottom'>{this.state.bottomText}</h2>
+				</div>
 			</div>
 		);
 	}
